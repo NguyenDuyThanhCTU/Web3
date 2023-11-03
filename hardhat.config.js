@@ -38,14 +38,17 @@ module.exports = {
       hardhat: {},
       sepolia: {
         url: "https://rpc.ankr.com/eth_sepolia",
-        accounts: [`0x${process.env.PRIVATE_KEY}`],
+        accounts: [
+          `0x330170b2b0993e5ce6bf514a2aa8c71659a77ad410eaa62aa4054385b7e393ec}`,
+        ],
       },
     },
     settings: {
       optimizer: {
         enabled: true,
-        runs: 200,
+        runs: 100,
       },
+      viaIR: true,
     },
   },
 };

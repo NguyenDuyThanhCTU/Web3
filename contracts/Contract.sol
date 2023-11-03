@@ -4,27 +4,20 @@ pragma solidity ^0.8.9;
 contract ShoeStore {
     struct Shoe {
         address owner;
-        uint256 id;
         string name;
-        string description;
-        string introduction;
         string url;
-        string color;
         string image;
         uint256 price;
         address[] buyers;
-        string[] functions;
-        bool state;
         string typeurl;
         string parenturl;
-        uint256 discount;
-        uint256 newprice;
         uint256 limitspeed;
         uint256 limitdistance;
         uint256 limitcoinearning;
         uint256 limittime;
         bool nightmode;
         bool test;
+        uint256 level;
     }
 
     mapping(uint256 => Shoe) public shoes;
@@ -34,44 +27,34 @@ contract ShoeStore {
     function createShoe(
         address _owner,
         string memory _name,
-        string memory _description,
-        string memory _introduction,
         string memory _url,
-        string memory _color,
         string memory _image,
         uint256 _price,
         string memory _typeurl,
         string memory _parenturl,
-        uint256 _discount,
-        uint256 _newprice,
         uint256 _limitspeed,
         uint256 _limitdistance,
         uint256 _limitcoinearning,
         uint256 _limittime,
         bool _nightmode,
-        bool _test
+        bool _test,
+        uint256 _level
     ) public returns (uint256) {
         Shoe storage shoe = shoes[numberOfShoes];
-
         shoe.owner = _owner;
         shoe.name = _name;
-        shoe.description = _description;
-        shoe.introduction = _introduction;
         shoe.url = _url;
-        shoe.color = _color;
         shoe.image = _image;
         shoe.price = _price;
         shoe.typeurl = _typeurl;
         shoe.parenturl = _parenturl;
-        shoe.discount = _discount;
-        shoe.newprice = _newprice;
         shoe.limitspeed = _limitspeed;
         shoe.limitdistance = _limitdistance;
         shoe.limitcoinearning = _limitcoinearning;
         shoe.limittime = _limittime;
         shoe.nightmode = _nightmode;
         shoe.test = _test;
-
+        shoe.level = _level;
         numberOfShoes++;
         return numberOfShoes - 1;
     }
@@ -81,9 +64,6 @@ contract ShoeStore {
         Shoe storage shoe = shoes[_id];
         shoe.buyers.push(msg.sender);
 
-        if (shoe.discount > 0) {
-            price = shoe.newprice;
-        }
         (bool sent, ) = payable(shoe.owner).call{value: price}("");
         require(sent, "Failed to send Ether");
     }
