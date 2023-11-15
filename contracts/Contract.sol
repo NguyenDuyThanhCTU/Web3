@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
+import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
+
 contract ShoeStore {
     struct Shoe {
         address owner;
@@ -41,6 +43,7 @@ contract ShoeStore {
         uint256 _level
     ) public returns (uint256) {
         Shoe storage shoe = shoes[numberOfShoes];
+
         shoe.owner = _owner;
         shoe.name = _name;
         shoe.url = _url;
@@ -86,5 +89,65 @@ contract ShoeStore {
             _shoes[i] = shoes[i];
         }
         return _shoes;
+    }
+
+    //get shoes with field name and value
+    function getShoesByField(
+        string memory _value
+    ) public view returns (Shoe[] memory) {
+        Shoe[] memory _shoes = new Shoe[](numberOfShoes);
+        uint256 count = 0;
+        for (uint256 i = 0; i < numberOfShoes; i++) {
+            Shoe memory shoe = shoes[i];
+            if (
+                keccak256(abi.encodePacked(shoe.parenturl)) ==
+                keccak256(abi.encodePacked(_value))
+            ) {
+                _shoes[count] = shoe;
+                count++;
+            }
+        }
+        return _shoes;
+    }
+
+    //delete shoe by pId
+    function deleteShoe(uint256 _id) public {
+        delete shoes[_id];
+    }
+
+    //update shoe by pId
+    function updateShoe(
+        uint256 _id,
+        address _owner,
+        string memory _name,
+        string memory _url,
+        string memory _image,
+        uint256 _price,
+        string memory _typeurl,
+        string memory _parenturl,
+        uint256 _limitspeed,
+        uint256 _limitdistance,
+        uint256 _limitcoinearning,
+        uint256 _limittime,
+        bool _nightmode,
+        bool _test,
+        uint256 _level
+    ) public {
+        Shoe storage shoe = shoes[_id];
+
+        shoe.owner = _owner;
+        shoe.name = _name;
+        shoe.url = _url;
+        shoe.image = _image;
+        shoe.price = _price;
+        shoe.typeurl = _typeurl;
+        shoe.parenturl = _parenturl;
+        shoe.limitspeed = _limitspeed;
+        shoe.limitdistance = _limitdistance;
+        shoe.limitcoinearning = _limitcoinearning;
+        shoe.limittime = _limittime;
+        shoe.nightmode = _nightmode;
+        shoe.test = _test;
+        shoe.level = _level;
     }
 }
